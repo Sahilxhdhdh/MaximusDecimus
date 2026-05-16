@@ -78,5 +78,21 @@
         "file": ".git/contracts/Voting.sol"
       }
     }
+  },
+  ".git/contracts/Lottery.sol": {
+    "__sources__": {
+      ".git/contracts/Lottery.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract Lottery {\r\n\r\n    address public manager;\r\n    string public winnerMessage;\r\n\r\n    address public winner;\r\n\r\n    address[] public players;\r\n\r\n    constructor() {\r\n        manager = msg.sender;\r\n    }\r\n\r\n    function buyTicket() public payable {\r\n\r\n        require(\r\n            msg.value == 100 wei,\r\n            \"Ticket price is 100 wei\"\r\n        );\r\n\r\n        players.push(msg.sender);\r\n    }\r\n\r\n    function random() private view returns(uint) {\r\n\r\n        return uint(\r\n            keccak256(\r\n                abi.encodePacked(\r\n                    block.timestamp,\r\n                    players.length\r\n                )\r\n            )\r\n        );\r\n    }\r\n\r\n    function pickWinner() public {\r\n\r\n    require(\r\n        msg.sender == manager,\r\n        \"Only manager can pick winner\"\r\n    );\r\n\r\n    require(\r\n        players.length > 0,\r\n        \"No players\"\r\n    );\r\n\r\n    uint index =\r\n        random() % players.length;\r\n\r\n    winner = players[index];\r\n\r\n    winnerMessage = \"Winner Selected\";\r\n\r\n    payable(winner).transfer(\r\n        address(this).balance\r\n    );\r\n\r\n    players = new address[](0);\r\n}\r\n\r\n    function getPlayers()\r\n    public\r\n    view\r\n    returns(address[] memory) {\r\n\r\n        return players;\r\n    }\r\n}",
+        "file": ".git/contracts/Lottery.sol"
+      }
+    }
+  },
+  ".git/contracts/Certificate.sol": {
+    "__sources__": {
+      ".git/contracts/Certificate.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract CertificateVerification {\r\n\r\n    struct Certificate {\r\n\r\n        uint certificateId;\r\n        string studentName;\r\n        string courseName;\r\n        address issuer;\r\n        bool valid;\r\n    }\r\n\r\n    mapping(uint => Certificate) public certificates;\r\n\r\n    function issueCertificate(\r\n        uint _id,\r\n        string memory _studentName,\r\n        string memory _courseName\r\n    ) public {\r\n\r\n        certificates[_id] = Certificate(\r\n            _id,\r\n            _studentName,\r\n            _courseName,\r\n            msg.sender,\r\n            true\r\n        );\r\n    }\r\n\r\n    function verifyCertificate(uint _id)\r\n    public\r\n    view\r\n    returns(\r\n        uint,\r\n        string memory,\r\n        string memory,\r\n        address,\r\n        bool\r\n    ) {\r\n\r\n        Certificate memory c =\r\n            certificates[_id];\r\n\r\n        return (\r\n            c.certificateId,\r\n            c.studentName,\r\n            c.courseName,\r\n            c.issuer,\r\n            c.valid\r\n        );\r\n    }\r\n}",
+        "file": ".git/contracts/Certificate.sol"
+      }
+    }
   }
 }
