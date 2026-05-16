@@ -94,5 +94,29 @@
         "file": ".git/contracts/Certificate.sol"
       }
     }
+  },
+  "contracts/Web3Demo.sol": {
+    "__sources__": {
+      "contracts/Web3Demo.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract Web3Demo {\r\n\r\n    string public message;\r\n\r\n    constructor() {\r\n        message = \"Hello Web3\";\r\n    }\r\n\r\n    function setMessage(string memory _message) public {\r\n        message = _message;\r\n    }\r\n\r\n    function getMessage() public view returns(string memory) {\r\n        return message;\r\n    }\r\n}",
+        "file": "contracts/Web3Demo.sol"
+      }
+    }
+  },
+  "contracts/CryptoDemo.sol": {
+    "__sources__": {
+      "contracts/CryptoDemo.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract CryptoDemo {\r\n\r\n    string public coinName = \"DemoCoin\";\r\n    uint public totalSupply = 1000000;\r\n    address public owner;\r\n\r\n    constructor() {\r\n        owner = msg.sender;\r\n    }\r\n\r\n    function getCoinDetails() public view returns(string memory, uint) {\r\n        return (coinName, totalSupply);\r\n    }\r\n}",
+        "file": "contracts/CryptoDemo.sol"
+      }
+    }
+  },
+  "contracts/Hello.sol": {
+    "__sources__": {
+      "contracts/Hello.sol": {
+        "content": "// SPDX-License-Identifier: GPL-3.0\r\npragma solidity ^0.8.0;\r\n\r\ncontract Hello{\r\n    string public message = \"Welcome to blockchain\";\r\n}",
+        "file": "contracts/Hello.sol"
+      }
+    }
   }
 }
