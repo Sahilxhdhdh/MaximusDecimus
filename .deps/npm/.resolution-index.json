@@ -1,9 +1,73 @@
 {
+  ".git/contracts/Voting.sol": {
+    "__sources__": {
+      ".git/contracts/Voting.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract Voting {\r\n\r\n    address public admin;\r\n    bool public votingActive;\r\n\r\n    mapping(address => bool) public hasVoted;\r\n\r\n    uint public candidate1Votes;\r\n    uint public candidate2Votes;\r\n\r\n    constructor() {\r\n        admin = msg.sender;\r\n    }\r\n\r\n    function startVoting() public {\r\n        require(msg.sender == admin, \"Only admin can start voting\");\r\n        votingActive = true;\r\n    }\r\n\r\n    function endVoting() public {\r\n        require(msg.sender == admin, \"Only admin can end voting\");\r\n        votingActive = false;\r\n    }\r\n\r\n    function vote(uint candidate) public {\r\n\r\n        require(votingActive == true, \"Voting is not active\");\r\n        require(!hasVoted[msg.sender], \"You have already voted\");\r\n\r\n        if(candidate == 1) {\r\n            candidate1Votes++;\r\n        }\r\n\r\n        else if(candidate == 2) {\r\n            candidate2Votes++;\r\n        }\r\n\r\n        hasVoted[msg.sender] = true;\r\n    }\r\n\r\n    function getWinner() public view returns(string memory) {\r\n\r\n        if(candidate1Votes > candidate2Votes) {\r\n            return \"Candidate 1 Wins\";\r\n        }\r\n\r\n        else if(candidate2Votes > candidate1Votes) {\r\n            return \"Candidate 2 Wins\";\r\n        }\r\n\r\n        else {\r\n            return \"Tie\";\r\n        }\r\n    }\r\n}",
+        "file": ".git/contracts/Voting.sol"
+      }
+    }
+  },
+  ".git/contracts/Valo.sol": {
+    "__sources__": {
+      ".git/contracts/Valo.sol": {
+        "content": "// SPDX-License-Identifier: GPL-3.0\r\npragma solidity ^0.8.0;\r\n\r\ncontract Valo{\r\n    string public message = \"They will cower\";\r\n}",
+        "file": ".git/contracts/Valo.sol"
+      }
+    }
+  },
+  ".git/contracts/Todo.sol": {
+    "__sources__": {
+      ".git/contracts/Todo.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract TodoList {\r\n\r\n    struct Task {\r\n        string taskText;\r\n        bool completed;\r\n    }\r\n\r\n    mapping(address => Task[]) public tasks;\r\n\r\n    function addTask(string memory _taskText) public {\r\n\r\n        tasks[msg.sender].push(Task(_taskText, false));\r\n    }\r\n\r\n    function updateTask(uint index, string memory _newText) public {\r\n\r\n        tasks[msg.sender][index].taskText = _newText;\r\n    }\r\n\r\n    function markCompleted(uint index) public {\r\n\r\n        tasks[msg.sender][index].completed = true;\r\n    }\r\n\r\n    function getTask(uint index) public view returns(string memory, bool) {\r\n\r\n        Task memory task = tasks[msg.sender][index];\r\n\r\n        return (task.taskText, task.completed);\r\n    }\r\n    \r\n    function getAllTasks() public view returns(Task[] memory) {\r\n\r\n    return tasks[msg.sender];\r\n}\r\n}",
+        "file": ".git/contracts/Todo.sol"
+      }
+    }
+  },
+  ".git/contracts/SupplyChain.sol": {
+    "__sources__": {
+      ".git/contracts/SupplyChain.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract SupplyChain {\r\n\r\n    struct Product {\r\n\r\n        uint id;\r\n        string name;\r\n        string status;\r\n        address participant;\r\n        uint timestamp;\r\n    }\r\n\r\n    Product[] public products;\r\n\r\n    function addProduct(\r\n        uint _id,\r\n        string memory _name,\r\n        string memory _status\r\n    ) public {\r\n\r\n        products.push(\r\n            Product(\r\n                _id,\r\n                _name,\r\n                _status,\r\n                msg.sender,\r\n                block.timestamp\r\n            )\r\n        );\r\n    }\r\n\r\n    function updateStatus(\r\n        uint index,\r\n        string memory _newStatus\r\n    ) public {\r\n\r\n        products[index].status = _newStatus;\r\n\r\n        products[index].participant = msg.sender;\r\n\r\n        products[index].timestamp = block.timestamp;\r\n    }\r\n\r\n    function getProduct(uint index)\r\n    public\r\n    view\r\n    returns(\r\n        uint,\r\n        string memory,\r\n        string memory,\r\n        address,\r\n        uint\r\n    ) {\r\n\r\n        Product memory p = products[index];\r\n\r\n        return (\r\n            p.id,\r\n            p.name,\r\n            p.status,\r\n            p.participant,\r\n            p.timestamp\r\n        );\r\n    }\r\n}",
+        "file": ".git/contracts/SupplyChain.sol"
+      }
+    }
+  },
+  ".git/contracts/Subscription.sol": {
+    "__sources__": {
+      ".git/contracts/Subscription.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract SubscriptionService {\r\n\r\n    uint public subscriptionFee = 100 wei;\r\n    uint public duration = 300;\r\n\r\n    mapping(address => uint) public subscribers;\r\n\r\n    function subscribe() public payable {\r\n\r\n        require(\r\n            msg.value >= subscriptionFee,\r\n            \"Insufficient Fee\"\r\n        );\r\n\r\n        subscribers[msg.sender] =\r\n            block.timestamp + duration;\r\n    }\r\n\r\n    function checkAccess()\r\n    public\r\n    view\r\n    returns(bool) {\r\n\r\n        return\r\n            block.timestamp <\r\n            subscribers[msg.sender];\r\n    }\r\n}",
+        "file": ".git/contracts/Subscription.sol"
+      }
+    }
+  },
+  ".git/contracts/NFT.sol": {
+    "__sources__": {
+      ".git/contracts/NFT.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract NFTMint {\r\n\r\n    struct NFT {\r\n\r\n        uint tokenId;\r\n        string metadata;\r\n        address owner;\r\n    }\r\n\r\n    NFT[] public nfts;\r\n\r\n    function mintNFT(\r\n        uint _tokenId,\r\n        string memory _metadata\r\n    ) public {\r\n\r\n        nfts.push(\r\n            NFT(\r\n                _tokenId,\r\n                _metadata,\r\n                msg.sender\r\n            )\r\n        );\r\n    }\r\n\r\n    function transferNFT(\r\n        uint index,\r\n        address newOwner\r\n    ) public {\r\n\r\n        require(\r\n            nfts[index].owner == msg.sender,\r\n            \"Not NFT Owner\"\r\n        );\r\n\r\n        nfts[index].owner = newOwner;\r\n    }\r\n\r\n    function getNFT(uint index)\r\n    public\r\n    view\r\n    returns(\r\n        uint,\r\n        string memory,\r\n        address\r\n    ) {\r\n\r\n        NFT memory n = nfts[index];\r\n\r\n        return (\r\n            n.tokenId,\r\n            n.metadata,\r\n            n.owner\r\n        );\r\n    }\r\n}",
+        "file": ".git/contracts/NFT.sol"
+      }
+    }
+  },
   ".git/contracts/Bank.sol": {
     "__sources__": {
       ".git/contracts/Bank.sol": {
         "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract SimpleBank {\r\n\r\n    mapping(address => uint) public balances;\r\n\r\n    function deposit() public payable {\r\n\r\n        balances[msg.sender] += msg.value;\r\n    }\r\n\r\n    function withdraw(uint amount) public {\r\n\r\n        require(balances[msg.sender] >= amount, \"Insufficient Balance\");\r\n\r\n        balances[msg.sender] -= amount;\r\n\r\n        payable(msg.sender).transfer(amount);\r\n    }\r\n\r\n    function checkBalance() public view returns(uint) {\r\n\r\n        return balances[msg.sender];\r\n    }\r\n}",
         "file": ".git/contracts/Bank.sol"
+      }
+    }
+  },
+  ".git/contracts/Escrow.sol": {
+    "__sources__": {
+      ".git/contracts/Escrow.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract Escrow {\r\n\r\n    address public buyer;\r\n    address payable public seller;\r\n\r\n    bool public buyerApproved;\r\n    bool public sellerApproved;\r\n\r\n    uint public releaseTime;\r\n\r\n    constructor(address payable _seller) payable {\r\n\r\n        buyer = msg.sender;\r\n        seller = _seller;\r\n\r\n        releaseTime = block.timestamp + 300;\r\n    }\r\n\r\n    function approveByBuyer() public {\r\n\r\n        require(msg.sender == buyer);\r\n\r\n        buyerApproved = true;\r\n    }\r\n\r\n    function approveBySeller() public {\r\n\r\n        require(msg.sender == seller);\r\n\r\n        sellerApproved = true;\r\n    }\r\n\r\n    function releasePayment() public {\r\n\r\n        require(\r\n            buyerApproved && sellerApproved\r\n            || block.timestamp > releaseTime,\r\n            \"Conditions not satisfied\"\r\n        );\r\n\r\n        seller.transfer(address(this).balance);\r\n    }\r\n}",
+        "file": ".git/contracts/Escrow.sol"
+      }
+    }
+  },
+  ".git/contracts/Hello.sol": {
+    "__sources__": {
+      ".git/contracts/Hello.sol": {
+        "content": "// SPDX-License-Identifier: GPL-3.0\r\npragma solidity ^0.8.0;\r\n\r\ncontract Hello{\r\n    string public message = \"Welcome to blockchain\";\r\n}",
+        "file": ".git/contracts/Hello.sol"
       }
     }
   },
