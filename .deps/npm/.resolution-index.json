@@ -1,0 +1,18 @@
+{
+  ".git/contracts/Bank.sol": {
+    "__sources__": {
+      ".git/contracts/Bank.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract SimpleBank {\r\n\r\n    mapping(address => uint) public balances;\r\n\r\n    function deposit() public payable {\r\n\r\n        balances[msg.sender] += msg.value;\r\n    }\r\n\r\n    function withdraw(uint amount) public {\r\n\r\n        require(balances[msg.sender] >= amount, \"Insufficient Balance\");\r\n\r\n        balances[msg.sender] -= amount;\r\n\r\n        payable(msg.sender).transfer(amount);\r\n    }\r\n\r\n    function checkBalance() public view returns(uint) {\r\n\r\n        return balances[msg.sender];\r\n    }\r\n}",
+        "file": ".git/contracts/Bank.sol"
+      }
+    }
+  },
+  ".git/contracts/Crowdfunding.sol": {
+    "__sources__": {
+      ".git/contracts/Crowdfunding.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract Crowdfunding {\r\n\r\n    address public owner;\r\n    uint public goal;\r\n    uint public deadline;\r\n    uint public totalFunds;\r\n\r\n    mapping(address => uint) public donations;\r\n\r\n    constructor(uint _goal, uint _duration) {\r\n        owner = msg.sender;\r\n        goal = _goal;\r\n        deadline = block.timestamp + _duration;\r\n    }\r\n\r\n    function donate() public payable {\r\n\r\n        require(block.timestamp < deadline, \"Deadline passed\");\r\n\r\n        donations[msg.sender] += msg.value;\r\n        totalFunds += msg.value;\r\n    }\r\n\r\n    function withdrawFunds() public {\r\n\r\n        require(msg.sender == owner, \"Only owner can withdraw\");\r\n        require(totalFunds >= goal, \"Goal not reached\");\r\n\r\n        payable(owner).transfer(totalFunds);\r\n    }\r\n\r\n    function refund() public {\r\n\r\n        require(block.timestamp > deadline, \"Campaign still active\");\r\n        require(totalFunds < goal, \"Goal reached\");\r\n\r\n        uint amount = donations[msg.sender];\r\n\r\n        donations[msg.sender] = 0;\r\n\r\n        payable(msg.sender).transfer(amount);\r\n    }\r\n}",
+        "file": ".git/contracts/Crowdfunding.sol"
+      }
+    }
+  }
+}
