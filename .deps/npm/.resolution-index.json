@@ -1,12 +1,4 @@
 {
-  ".git/contracts/Voting.sol": {
-    "__sources__": {
-      ".git/contracts/Voting.sol": {
-        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract Voting {\r\n\r\n    address public admin;\r\n    bool public votingActive;\r\n\r\n    mapping(address => bool) public hasVoted;\r\n\r\n    uint public candidate1Votes;\r\n    uint public candidate2Votes;\r\n\r\n    constructor() {\r\n        admin = msg.sender;\r\n    }\r\n\r\n    function startVoting() public {\r\n        require(msg.sender == admin, \"Only admin can start voting\");\r\n        votingActive = true;\r\n    }\r\n\r\n    function endVoting() public {\r\n        require(msg.sender == admin, \"Only admin can end voting\");\r\n        votingActive = false;\r\n    }\r\n\r\n    function vote(uint candidate) public {\r\n\r\n        require(votingActive == true, \"Voting is not active\");\r\n        require(!hasVoted[msg.sender], \"You have already voted\");\r\n\r\n        if(candidate == 1) {\r\n            candidate1Votes++;\r\n        }\r\n\r\n        else if(candidate == 2) {\r\n            candidate2Votes++;\r\n        }\r\n\r\n        hasVoted[msg.sender] = true;\r\n    }\r\n\r\n    function getWinner() public view returns(string memory) {\r\n\r\n        if(candidate1Votes > candidate2Votes) {\r\n            return \"Candidate 1 Wins\";\r\n        }\r\n\r\n        else if(candidate2Votes > candidate1Votes) {\r\n            return \"Candidate 2 Wins\";\r\n        }\r\n\r\n        else {\r\n            return \"Tie\";\r\n        }\r\n    }\r\n}",
-        "file": ".git/contracts/Voting.sol"
-      }
-    }
-  },
   ".git/contracts/Valo.sol": {
     "__sources__": {
       ".git/contracts/Valo.sol": {
@@ -76,6 +68,14 @@
       ".git/contracts/Crowdfunding.sol": {
         "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract Crowdfunding {\r\n\r\n    address public owner;\r\n    uint public goal;\r\n    uint public deadline;\r\n    uint public totalFunds;\r\n\r\n    mapping(address => uint) public donations;\r\n\r\n    constructor(uint _goal, uint _duration) {\r\n        owner = msg.sender;\r\n        goal = _goal;\r\n        deadline = block.timestamp + _duration;\r\n    }\r\n\r\n    function donate() public payable {\r\n\r\n        require(block.timestamp < deadline, \"Deadline passed\");\r\n\r\n        donations[msg.sender] += msg.value;\r\n        totalFunds += msg.value;\r\n    }\r\n\r\n    function withdrawFunds() public {\r\n\r\n        require(msg.sender == owner, \"Only owner can withdraw\");\r\n        require(totalFunds >= goal, \"Goal not reached\");\r\n\r\n        payable(owner).transfer(totalFunds);\r\n    }\r\n\r\n    function refund() public {\r\n\r\n        require(block.timestamp > deadline, \"Campaign still active\");\r\n        require(totalFunds < goal, \"Goal reached\");\r\n\r\n        uint amount = donations[msg.sender];\r\n\r\n        donations[msg.sender] = 0;\r\n\r\n        payable(msg.sender).transfer(amount);\r\n    }\r\n}",
         "file": ".git/contracts/Crowdfunding.sol"
+      }
+    }
+  },
+  ".git/contracts/Voting.sol": {
+    "__sources__": {
+      ".git/contracts/Voting.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract Voting {\r\n\r\n    address public admin;\r\n    bool public votingActive;\r\n\r\n    mapping(address => bool) public hasVoted;\r\n\r\n    uint public candidate1Votes;\r\n    uint public candidate2Votes;\r\n\r\n    constructor() {\r\n        admin = msg.sender;\r\n    }\r\n\r\n    function startVoting() public {\r\n        require(msg.sender == admin, \"Only admin can start voting\");\r\n        votingActive = true;\r\n    }\r\n\r\n    function endVoting() public {\r\n        require(msg.sender == admin, \"Only admin can end voting\");\r\n        votingActive = false;\r\n    }\r\n\r\n    function vote(uint candidate) public {\r\n\r\n        require(votingActive == true, \"Voting is not active\");\r\n        require(!hasVoted[msg.sender], \"You have already voted\");\r\n\r\n        if(candidate == 1) {\r\n            candidate1Votes++;\r\n        }\r\n\r\n        else if(candidate == 2) {\r\n            candidate2Votes++;\r\n        }\r\n\r\n        hasVoted[msg.sender] = true;\r\n    }\r\n\r\n    function getWinner() public view returns(string memory) {\r\n\r\n        if(candidate1Votes > candidate2Votes) {\r\n            return \"Candidate 1 Wins\";\r\n        }\r\n\r\n        else if(candidate2Votes > candidate1Votes) {\r\n            return \"Candidate 2 Wins\";\r\n        }\r\n\r\n        else {\r\n            return \"Tie\";\r\n        }\r\n    }\r\n}",
+        "file": ".git/contracts/Voting.sol"
       }
     }
   }
